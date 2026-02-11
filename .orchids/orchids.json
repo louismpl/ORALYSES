@@ -1,0 +1,13 @@
+{
+  "projectId": "d9e545f7-80de-42b9-adc5-64664533dd36",
+  "createdAt": 1770824964419,
+  "version": "1.0",
+  "startupCommands": [
+    "bun install; bun run dev"
+  ],
+  "templateId": "nextjs",
+  "envVars": {
+    "NEXT_PUBLIC_SUPABASE_URL": "https://qpjjgnyicgqqyzygxjbc.supabase.co",
+    "NEXT_PUBLIC_SUPABASE_ANON_KEY": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFwampnbnlpY2dxcXl6eWd4amJjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzA4MjA2OTUsImV4cCI6MjA4NjM5NjY5NX0.ZkBj2yJFRLA9A7SJNq4v-qEe3xCqI8kGzhIwvLpOkqY"
+  }
+}
