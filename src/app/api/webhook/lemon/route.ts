@@ -30,10 +30,12 @@ export async function POST(req: NextRequest) {
             const variantId = payload.data.attributes.variant_id; // Map this to 'pro' or 'cabinet'
 
             if (userId && (status === "active" || status === "on_trial")) {
-                // Update profile plan
-                // You should map variantId to your specific plan names
                 let plan = "free";
-                if (variantId) plan = "pro"; // Default to pro for now
+                if (variantId?.toString() === "1325457") {
+                    plan = "pro"; // Pack Libéral
+                } else if (variantId?.toString() === "1325461") {
+                    plan = "cabinet"; // Pack Cabinet
+                }
 
                 const { error } = await supabaseAdmin
                     .from("profiles")

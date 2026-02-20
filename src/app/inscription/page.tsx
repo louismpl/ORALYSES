@@ -99,8 +99,8 @@ function InscriptionContent() {
         await new Promise(r => setTimeout(r, 1000));
 
         const variantId = selectedPlan === "cabinet"
-          ? "534720" // Replace with actual Cabinet Variant ID
-          : "534719"; // Replace with actual Libéral Variant ID (trial)
+          ? "1325461" // Actual Cabinet Variant ID
+          : "1325457"; // Actual Libéral Variant ID (trial)
 
         openLemonCheckout(variantId, data.user.id, email);
 
