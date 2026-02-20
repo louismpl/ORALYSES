@@ -93,18 +93,18 @@ function InscriptionContent() {
 
       await new Promise((resolve) => setTimeout(resolve, 500));
 
-      if (role === "therapist" && (selectedPlan === "pro" || selectedPlan === "cabinet")) {
+      if (role === "therapist") {
         toast.info("Redirection vers le paiement...");
         // Wait a bit for the profile to be created
         await new Promise(r => setTimeout(r, 1500));
 
+        // Default to "pro" plan if no plan specified
         const variantId = selectedPlan === "cabinet"
-          ? "1325461" // Actual Cabinet Variant ID
-          : "1325457"; // Actual Libéral Variant ID (trial)
+          ? "1325461" // Pack Cabinet Variant ID
+          : "1325457"; // Pack Libéral Variant ID (trial) — default for all therapists
 
         openLemonCheckout(variantId, data.user.id, email);
         // openLemonCheckout now redirects via window.location.href
-        // so we don't need router.push here - the page will navigate away
         return;
       } else if (role === "parent") {
         router.push("/parent");

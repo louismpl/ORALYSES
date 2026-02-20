@@ -18,6 +18,10 @@ export const metadata: Metadata = {
   title: "Oralyses - Les devoirs d'orthophonie deviennent un jeu",
   description:
     "Transformez les exercices d'orthophonie en jeux que les enfants veulent faire. Suivi en temps réel pour les parents et les thérapeutes.",
+  icons: {
+    icon: "/favicon.svg",
+    apple: "/favicon.svg",
+  },
 };
 
 export default function RootLayout({

@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
+import { openLemonCheckout } from "@/lib/lemon-squeezy";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -363,12 +364,13 @@ export function CabinetClient({
                                                     </span>.
                                                     Pour créer un cabinet multi-orthophonistes, passez au plan Cabinet.
                                                 </p>
-                                                <Link href="/#tarifs">
-                                                    <button className="mt-2 text-xs text-amber-700 font-semibold underline underline-offset-2 flex items-center gap-1 hover:text-amber-900">
-                                                        <Sparkles className="w-3 h-3" />
-                                                        Voir le plan Cabinet (99€/mois)
-                                                    </button>
-                                                </Link>
+                                                <button
+                                                    onClick={() => openLemonCheckout("1325461", profile.id, profile.email)}
+                                                    className="mt-2 text-xs text-amber-700 font-semibold underline underline-offset-2 flex items-center gap-1 hover:text-amber-900"
+                                                >
+                                                    <Sparkles className="w-3 h-3" />
+                                                    Souscrire au plan Cabinet (99€/mois)
+                                                </button>
                                             </div>
                                         </div>
                                     )}
