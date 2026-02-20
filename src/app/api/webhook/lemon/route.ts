@@ -10,11 +10,21 @@ const supabaseAdmin = createClient(
 export async function POST(req: NextRequest) {
     try {
         const rawBody = await req.text();
-        const hmac = crypto.createHmac("sha256", process.env.LEMON_SQUEEZY_WEBHOOK_SECRET || "placeholder");
-        const digest = Buffer.from(hmac.update(rawBody).digest("hex"), "utf8");
-        const signature = Buffer.from(req.headers.get("x-signature") || "", "utf8");
+        const secret = process.env.LEMON_SQUEEZY_WEBHOOK_SECRET;
 
-        if (!crypto.timingSafeEqual(digest, signature)) {
+        if (!secret) {
+            console.error("LEMON_SQUEEZY_WEBHOOK_SECRET is not set!");
+            return NextResponse.json({ error: "Server misconfigured" }, { status: 500 });
+        }
+
+        const hmac = crypto.createHmac("sha256", secret);
+        const digest = hmac.update(rawBody).digest("hex");
+        const signature = req.headers.get("x-signature") || "";
+
+        console.log("Webhook received. Digest:", digest.substring(0, 10) + "...", "Signature:", signature.substring(0, 10) + "...");
+
+        if (digest.length !== signature.length || !crypto.timingSafeEqual(Buffer.from(digest, "utf8"), Buffer.from(signature, "utf8"))) {
+            console.error("Signature mismatch!");
             return NextResponse.json({ error: "Invalid signature" }, { status: 401 });
         }
 
