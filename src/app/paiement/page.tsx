@@ -91,6 +91,10 @@ export default function PaiementPage() {
         );
     }
 
+    // Determine if this is a first-time user (never paid) or a returning user
+    const isFirstTime = profile?.subscription_status === "unpaid" || !profile?.subscription_status;
+    const isReturning = profile?.subscription_status === "cancelled" || profile?.subscription_status === "expired" || profile?.subscription_status === "paused";
+
     return (
         <div className="min-h-screen bg-gradient-to-b from-violet-50 via-white to-orange-50/30">
             {/* Header */}
@@ -116,16 +120,28 @@ export default function PaiementPage() {
             <div className="max-w-5xl mx-auto px-4 py-12">
                 {/* Title area */}
                 <div className="text-center mb-12">
-                    <div className="inline-flex items-center gap-2 bg-amber-50 text-amber-700 px-4 py-2 rounded-full text-sm font-semibold mb-6 border border-amber-200">
-                        <Shield className="w-4 h-4" />
-                        Abonnement requis
-                    </div>
+                    {isReturning ? (
+                        <div className="inline-flex items-center gap-2 bg-red-50 text-red-700 px-4 py-2 rounded-full text-sm font-semibold mb-6 border border-red-200">
+                            <Shield className="w-4 h-4" />
+                            Abonnement expiré
+                        </div>
+                    ) : (
+                        <div className="inline-flex items-center gap-2 bg-amber-50 text-amber-700 px-4 py-2 rounded-full text-sm font-semibold mb-6 border border-amber-200">
+                            <Shield className="w-4 h-4" />
+                            Abonnement requis
+                        </div>
+                    )}
                     <h1 className="text-3xl sm:text-4xl font-black text-gray-900 mb-3">
-                        Bonjour {profile?.full_name?.split(" ")[0]} 👋
+                        {isReturning
+                            ? <>Bon retour {profile?.full_name?.split(" ")[0]} 👋</>
+                            : <>Bonjour {profile?.full_name?.split(" ")[0]} 👋</>
+                        }
                     </h1>
                     <p className="text-lg text-gray-500 max-w-md mx-auto">
-                        Choisissez votre formule pour accéder à votre espace et commencer
-                        à transformer vos séances d&apos;orthophonie.
+                        {isReturning
+                            ? "Votre abonnement a expiré. Réactivez-le pour retrouver votre espace."
+                            : "Choisissez votre formule pour accéder à votre espace et commencer à transformer vos séances d\u0027orthophonie."
+                        }
                     </p>
                 </div>
 
@@ -152,9 +168,15 @@ export default function PaiementPage() {
                             <span className="text-5xl font-black text-gray-900">39€</span>
                             <span className="text-gray-400 font-bold">/mois</span>
                         </div>
-                        <p className="text-xs text-violet-600 font-semibold mb-6">
-                            ✨ 14 jours d&apos;essai gratuit
-                        </p>
+                        {isFirstTime ? (
+                            <p className="text-xs text-violet-600 font-semibold mb-6">
+                                ✨ 14 jours d&apos;essai gratuit
+                            </p>
+                        ) : (
+                            <p className="text-xs text-gray-400 font-semibold mb-6">
+                                Facturation mensuelle
+                            </p>
+                        )}
 
                         <ul className="space-y-3 mb-8 text-sm font-semibold text-gray-600">
                             {[
@@ -176,7 +198,7 @@ export default function PaiementPage() {
                             onClick={() => handleSelectPlan("pro")}
                             className="w-full h-12 rounded-2xl bg-gray-900 hover:bg-black text-white font-bold shadow-lg transition-all active:scale-95"
                         >
-                            Commencer l&apos;essai gratuit
+                            {isFirstTime ? "Commencer l\u0027essai gratuit" : "S\u0027abonner — 39€/mois"}
                             <ArrowRight className="w-4 h-4 ml-2" />
                         </Button>
                     </div>
@@ -211,7 +233,7 @@ export default function PaiementPage() {
 
                         <ul className="space-y-3 mb-8 text-sm font-semibold text-gray-600">
                             {[
-                                "Jusqu'à 5 praticiens",
+                                "Jusqu\u0027à 5 praticiens",
                                 "Facturation centralisée",
                                 "Analytiques globales",
                                 "Partage de dossiers",
@@ -229,7 +251,7 @@ export default function PaiementPage() {
                             onClick={() => handleSelectPlan("cabinet")}
                             className="w-full h-12 rounded-2xl bg-gradient-to-r from-orange-400 to-violet-500 text-white font-bold shadow-lg transition-all active:scale-95 border-none hover:opacity-90"
                         >
-                            Inscrire le cabinet
+                            {isReturning ? "Réactiver — 99€/mois" : "Inscrire le cabinet"}
                             <ArrowRight className="w-4 h-4 ml-2" />
                         </Button>
                     </div>
