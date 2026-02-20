@@ -13,7 +13,7 @@ export default async function PlayPage({
   const { assignment, difficulty } = await searchParams;
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
-  
+
   if (!user) redirect("/connexion");
 
   const { data: game } = await supabase
@@ -32,12 +32,27 @@ export default async function PlayPage({
 
   if (!patient) redirect("/parent");
 
+  // If assignment is present, fetch it to check for custom config
+  if (assignment) {
+    const { data: assignmentData } = await supabase
+      .from("assignments")
+      .select("custom_config")
+      .eq("id", assignment)
+      .single();
+
+    if (assignmentData?.custom_config) {
+      game.config = assignmentData.custom_config;
+    }
+  }
+
+
+
   return (
     <GamePlayer
       game={game}
       patient={patient}
       assignmentId={assignment || null}
-      difficulty={parseInt(difficulty || "1")}
+      difficulty={parseInt(difficulty || "1") || 1}
     />
   );
 }

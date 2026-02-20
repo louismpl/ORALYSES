@@ -7,7 +7,7 @@ import { createClient } from "@/lib/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Sparkles } from "lucide-react";
+import { OralysesLogo } from "@/components/oralyses-logo";
 import { toast } from "sonner";
 
 export default function ConnexionPage() {
@@ -55,11 +55,9 @@ export default function ConnexionPage() {
       <div className="w-full max-w-sm">
         <div className="text-center mb-8">
           <Link href="/" className="inline-flex items-center gap-2 mb-6">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-violet-500 to-orange-400 flex items-center justify-center">
-              <Sparkles className="w-5 h-5 text-white" />
-            </div>
-            <span className="text-xl font-bold bg-gradient-to-r from-violet-600 to-orange-500 bg-clip-text text-transparent">
-              Speech Play
+            <OralysesLogo size={36} />
+            <span className="text-xl font-bold" style={{ color: '#F28C6F' }}>
+              Oralyses
             </span>
           </Link>
           <h1 className="text-2xl font-bold text-gray-900">Connexion</h1>
@@ -102,10 +100,19 @@ export default function ConnexionPage() {
           </Button>
         </form>
 
-        <p className="text-center text-sm text-gray-500 mt-6">
+        <p className="text-center text-sm text-gray-500 mt-4">
+          <Link
+            href="/mot-de-passe-oublie"
+            className="text-violet-600 font-medium hover:underline"
+          >
+            Mot de passe oublié ?
+          </Link>
+        </p>
+
+        <p className="text-center text-sm text-gray-500 mt-3">
           Pas encore de compte ?{" "}
           <Link href="/inscription" className="text-violet-600 font-medium hover:underline">
-            Creer un compte
+            Créer un compte
           </Link>
         </p>
       </div>

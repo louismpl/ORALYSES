@@ -41,11 +41,17 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(url);
   }
 
-  // Redirect logged-in users from auth pages
+  // Redirect logged-in users from auth pages to the right place
   if (user && (request.nextUrl.pathname === "/connexion" || request.nextUrl.pathname === "/inscription")) {
+    // Fetch profile role to redirect correctly
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("role")
+      .eq("id", user.id)
+      .single();
+
     const url = request.nextUrl.clone();
-    // We'll redirect based on role from profile
-    url.pathname = "/dashboard";
+    url.pathname = profile?.role === "therapist" ? "/dashboard" : "/parent";
     return NextResponse.redirect(url);
   }
 

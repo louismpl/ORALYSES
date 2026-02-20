@@ -5,7 +5,7 @@ import { ParentClient } from "./parent-client";
 export default async function ParentPage() {
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
-  
+
   if (!user) redirect("/connexion");
 
   const { data: profile } = await supabase
@@ -28,21 +28,43 @@ export default async function ParentPage() {
   // Get assignments for patients
   const { data: assignments } = patientIds.length
     ? await supabase
-        .from("assignments")
-        .select("*, games(*)")
-        .in("patient_id", patientIds)
-        .eq("active", true)
+      .from("assignments")
+      .select("*, games(*)")
+      .in("patient_id", patientIds)
+      .eq("active", true)
     : { data: [] };
 
-  // Get recent sessions
+  // Get recent sessions (with mood and game slug for charts)
   const { data: sessions } = patientIds.length
     ? await supabase
-        .from("game_sessions")
-        .select("*, games(name, category)")
-        .in("patient_id", patientIds)
-        .order("started_at", { ascending: false })
-        .limit(20)
+      .from("game_sessions")
+      .select("*, games(name, category, slug)")
+      .in("patient_id", patientIds)
+      .order("started_at", { ascending: false })
+      .limit(50)
     : { data: [] };
+
+  // Get rewards unlocked
+  const { data: unlockedRewards } = patientIds.length
+    ? await supabase
+      .from("patient_rewards")
+      .select("*, reward_items(*)")
+      .in("patient_id", patientIds)
+    : { data: [] };
+
+  // Get achievements unlocked
+  const { data: unlockedAchievements } = patientIds.length
+    ? await supabase
+      .from("patient_achievements")
+      .select("*, achievements(*)")
+      .in("patient_id", patientIds)
+    : { data: [] };
+
+  // Get all reward items to browse
+  const { data: allRewards } = await supabase
+    .from("reward_items")
+    .select("*")
+    .order("cost");
 
   return (
     <ParentClient
@@ -50,6 +72,9 @@ export default async function ParentPage() {
       patients={patients || []}
       assignments={assignments || []}
       sessions={sessions || []}
+      unlockedRewards={unlockedRewards || []}
+      unlockedAchievements={unlockedAchievements || []}
+      allRewards={allRewards || []}
     />
   );
 }

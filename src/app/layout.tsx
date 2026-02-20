@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Speech Play - Les devoirs d'orthophonie deviennent un jeu",
+  title: "Oralyses - Les devoirs d'orthophonie deviennent un jeu",
   description:
     "Transformez les exercices d'orthophonie en jeux que les enfants veulent faire. Suivi en temps réel pour les parents et les thérapeutes.",
 };

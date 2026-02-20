@@ -26,13 +26,14 @@ export function GameComplete({
   onPlayAgain: () => void;
   onGoBack: () => void;
 }) {
-  const messages = [
-    "Continue comme ca !",
-    "Bon travail !",
-    "Super !",
-    "Bravo, champion !",
-  ];
-  const message = messages[result.starsEarned];
+  // Index 0 = 0 stars, 1 = 1 star, 2 = 2 stars, 3 = 3 stars
+  const messages: Record<number, string> = {
+    0: "Courage, tu vas y arriver !",
+    1: "Continue comme ça !",
+    2: "Bien joué !",
+    3: "Bravo, champion ! 🏆",
+  };
+  const message = messages[result.starsEarned] ?? "Bravo !";
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-violet-100 to-orange-100 flex items-center justify-center p-4">
@@ -56,7 +57,7 @@ export function GameComplete({
           {message}
         </h2>
         <p className="text-gray-500 text-sm mb-6">
-          {patientName} a termine {gameName}
+          {patientName} a terminé <span className="font-medium text-gray-700">{gameName}</span>
         </p>
 
         {/* Stars */}
@@ -69,11 +70,10 @@ export function GameComplete({
               transition={{ delay: 0.5 + i * 0.2, type: "spring" }}
             >
               <Star
-                className={`w-12 h-12 ${
-                  i < result.starsEarned
+                className={`w-12 h-12 ${i < result.starsEarned
                     ? "text-yellow-400 fill-yellow-400"
                     : "text-gray-200"
-                }`}
+                  }`}
               />
             </motion.div>
           ))}
@@ -85,7 +85,7 @@ export function GameComplete({
             <div className="text-xl font-bold text-violet-600">
               {result.accuracy}%
             </div>
-            <div className="text-xs text-gray-500">Precision</div>
+            <div className="text-xs text-gray-500">Précision</div>
           </div>
           <div className="bg-orange-50 rounded-xl p-3">
             <div className="text-xl font-bold text-orange-600">
@@ -97,7 +97,7 @@ export function GameComplete({
             <div className="text-xl font-bold text-green-600">
               {Math.floor(result.durationSeconds / 60)}:{String(result.durationSeconds % 60).padStart(2, "0")}
             </div>
-            <div className="text-xs text-gray-500">Duree</div>
+            <div className="text-xs text-gray-500">Durée</div>
           </div>
         </div>
 

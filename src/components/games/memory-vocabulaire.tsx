@@ -88,11 +88,11 @@ export function MemoryVocabulaire({
 
   useEffect(() => {
     if (matched.length === cards.length && cards.length > 0) {
-      const perfectAttempts = totalPairs;
-      const accuracy = Math.min(
-        Math.round((perfectAttempts / attempts) * 100),
-        100
-      );
+      // accuracy = how close to perfect (ideal = totalPairs attempts)
+      // Guard against division by zero
+      const accuracy = attempts > 0
+        ? Math.min(Math.round((totalPairs / attempts) * 100), 100)
+        : 100;
       const stars =
         accuracy >= 90 ? 3 : accuracy >= 70 ? 2 : accuracy >= 50 ? 1 : 0;
       onComplete({
@@ -167,13 +167,12 @@ export function MemoryVocabulaire({
               key={card.id}
               onClick={() => handleCardClick(card.id)}
               whileTap={{ scale: 0.95 }}
-              className={`aspect-square rounded-2xl text-center flex items-center justify-center font-bold transition-all ${
-                isFlipped || isMatched
+              className={`aspect-square rounded-2xl text-center flex items-center justify-center font-bold transition-all ${isFlipped || isMatched
                   ? card.type === "word"
                     ? "bg-violet-100 border-2 border-violet-300 text-violet-700"
                     : "bg-orange-100 border-2 border-orange-300"
                   : "bg-gradient-to-br from-violet-400 to-orange-300 cursor-pointer hover:from-violet-500 hover:to-orange-400"
-              } ${isMatched ? "opacity-50" : ""}`}
+                } ${isMatched ? "opacity-50" : ""}`}
             >
               {isFlipped || isMatched ? (
                 <span className={card.type === "image" ? "text-3xl" : "text-sm"}>
