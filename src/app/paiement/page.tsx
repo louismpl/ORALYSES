@@ -75,7 +75,11 @@ export default function PaiementPage() {
     function handleSelectPlan(planType: "pro" | "cabinet") {
         if (!profile) return;
         const variantId = planType === "cabinet" ? "1325461" : "1325457";
-        openLemonCheckout(variantId, profile.id, profile.email);
+        // Returning users (cancelled/expired) should NOT get a free trial again
+        const shouldDisableTrial = profile.subscription_status === "cancelled"
+            || profile.subscription_status === "expired"
+            || profile.subscription_status === "paused";
+        openLemonCheckout(variantId, profile.id, profile.email, shouldDisableTrial);
     }
 
     if (loading) {
