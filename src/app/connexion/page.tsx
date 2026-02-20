@@ -37,14 +37,20 @@ export default function ConnexionPage() {
     if (user) {
       const { data: profile } = await supabase
         .from("profiles")
-        .select("role")
+        .select("role, subscription_status")
         .eq("id", user.id)
         .single();
 
       if (profile?.role === "parent") {
         router.push("/parent");
-      } else {
+      } else if (
+        profile?.subscription_status === "active" ||
+        profile?.subscription_status === "on_trial"
+      ) {
         router.push("/dashboard");
+      } else {
+        // Therapist who hasn't paid → payment page
+        router.push("/paiement");
       }
     }
     router.refresh();

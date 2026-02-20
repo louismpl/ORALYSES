@@ -4,7 +4,6 @@ import { useState } from "react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
-import { openLemonCheckout } from "@/lib/lemon-squeezy";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -94,17 +93,9 @@ function InscriptionContent() {
       await new Promise((resolve) => setTimeout(resolve, 500));
 
       if (role === "therapist") {
-        toast.info("Redirection vers le paiement...");
-        // Wait a bit for the profile to be created
-        await new Promise(r => setTimeout(r, 1500));
-
-        // Default to "pro" plan if no plan specified
-        const variantId = selectedPlan === "cabinet"
-          ? "1325461" // Pack Cabinet Variant ID
-          : "1325457"; // Pack Libéral Variant ID (trial) — default for all therapists
-
-        openLemonCheckout(variantId, data.user.id, email);
-        // openLemonCheckout now redirects via window.location.href
+        toast.info("Redirection vers le choix de votre abonnement...");
+        await new Promise(r => setTimeout(r, 1000));
+        router.push("/paiement");
         return;
       } else if (role === "parent") {
         router.push("/parent");

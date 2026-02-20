@@ -16,6 +16,12 @@ export default async function DashboardPage() {
 
   if (!profile || profile.role !== "therapist") redirect("/parent");
 
+  // ── Subscription gate: block unpaid therapists ──────────────────────────
+  const subStatus = profile.subscription_status;
+  if (subStatus !== "active" && subStatus !== "on_trial") {
+    redirect("/paiement");
+  }
+
   const { data: patients } = await supabase
     .from("patients")
     .select("*")
